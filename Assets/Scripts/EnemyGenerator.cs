@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class EnemyGenerator : MonoBehaviour
     private List<Enemy> _activeObjects = new List<Enemy>();
 
     private CustomObjectPool<Enemy> _pool;
+
+    public event Action EnemyKilled;
 
     private void Start()
     {
@@ -40,13 +43,14 @@ public class EnemyGenerator : MonoBehaviour
 
     private void Spawn()
     {
-        float spawnPositionY = Random.Range(_upperBound, _lowerBound);
+        float spawnPositionY = UnityEngine.Random.Range(_upperBound, _lowerBound);
         Vector3 SpawnPoint = new Vector3(transform.position.x, spawnPositionY, transform.position.z);
 
         Enemy enemy = _pool.Get();
         _activeObjects.Add(enemy);
         enemy.OnCollided += Return;
         enemy.OnDied += Return;
+        enemy.OnDied += ReportEnemyKilled;
         enemy.transform.position = SpawnPoint;
     }
 
@@ -54,8 +58,14 @@ public class EnemyGenerator : MonoBehaviour
     {
         enemy.OnCollided -= Return;
         enemy.OnDied -= Return;
+        enemy.OnDied -= ReportEnemyKilled;
         _activeObjects.Remove(enemy);
         _pool.ReturnToPool(enemy);
         enemy.Reset();
+    }
+
+    private void ReportEnemyKilled(Enemy enemy)
+    {
+        EnemyKilled?.Invoke();
     }
 }

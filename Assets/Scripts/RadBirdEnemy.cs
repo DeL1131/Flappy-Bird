@@ -1,16 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+[RequireComponent (typeof(RangeAttacker))]
 
 public class RadBirdEnemy : Enemy
 {
-    [SerializeField] private float _damage;
+    private RangeAttacker _attacker;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _attacker = GetComponent<RangeAttacker>();
+    }
 
     private void Update()
     {
         if (AttackCooldownHandler.CanAttack)
         {
-            Attacker.Attack(_damage);
+            _attacker.ExecuteAttack();
             StartCoroutine(AttackCooldownHandler.CooldownRoutine());
         }
     }

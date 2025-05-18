@@ -7,18 +7,18 @@ using UnityEngine;
 [RequireComponent(typeof(AttackCooldownHandler))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(BirdInput))]
-[RequireComponent(typeof(Attacker))]
+[RequireComponent (typeof(RangeAttacker))]
 
 public class Bird : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _damage;
 
+    private RangeAttacker _attacker;
     private BirdMover _birdMover;
     private ScoreCounter _scoreCounter;
     private BirdCollisionHandler _birdCollisionhandler;
     private Health _health;
     private BirdInput _input;
-    private Attacker _attacker;
     private AttackCooldownHandler _attackCooldownHandler;
 
     public event Action<float> Damaged;
@@ -26,7 +26,7 @@ public class Bird : MonoBehaviour, IDamagable
 
     private void Awake()
     {
-        _attacker = GetComponent<Attacker>();
+        _attacker = GetComponent<RangeAttacker>();
         _input = GetComponent<BirdInput>();
         _health = GetComponent<Health>();
         _scoreCounter = GetComponent<ScoreCounter>();
@@ -62,7 +62,7 @@ public class Bird : MonoBehaviour, IDamagable
 
     private void ProcessCollision(Collider2D collision)
     {
-        if ((collision.TryGetComponent(out Ground ground)))
+        if ((collision.TryGetComponent(out Ground ground)) || collision.TryGetComponent(out Wall wall))
         {
             GameOver?.Invoke();
         }
@@ -81,7 +81,7 @@ public class Bird : MonoBehaviour, IDamagable
     {
         if (_attackCooldownHandler.CanAttack)
         {
-            _attacker.Attack(_damage);
+            _attacker.ExecuteAttack();
             StartCoroutine(_attackCooldownHandler.CooldownRoutine());
         }
     }

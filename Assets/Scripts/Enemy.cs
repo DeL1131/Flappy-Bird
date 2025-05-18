@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(EnemyCollisionHandler))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent (typeof(Attacker))]
 [RequireComponent(typeof(AttackCooldownHandler))]
 
 public abstract class Enemy : MonoBehaviour, IDamagable
@@ -12,20 +11,18 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     protected Health Health;
     protected EnemyCollisionHandler CollisionHandler;
     protected Rigidbody2D Rigidbody2D;
-    protected Attacker Attacker;
     protected AttackCooldownHandler AttackCooldownHandler;
 
     public event Action<Enemy> OnCollided;
     public event Action<float> Damaged;
     public event Action<Enemy> OnDied;
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        Rigidbody2D = GetComponent<Rigidbody2D>();
         Health = GetComponent<Health>();
-        CollisionHandler = GetComponent<EnemyCollisionHandler>();
-        Attacker = GetComponent<Attacker>();
         AttackCooldownHandler = GetComponent<AttackCooldownHandler>();
+        Rigidbody2D = GetComponent<Rigidbody2D>();
+        CollisionHandler = GetComponent<EnemyCollisionHandler>();
     }
 
     private void OnEnable()

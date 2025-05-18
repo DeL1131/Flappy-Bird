@@ -30,7 +30,11 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(transform.right * _speed * Time.deltaTime);
+        Vector3 bulletPositionZ = transform.position;
+        bulletPositionZ.z = 0;
+        transform.position = bulletPositionZ;
+
+        transform.position += transform.right * _speed * Time.deltaTime;
     }
 
     public void SetDamage(float damage)
