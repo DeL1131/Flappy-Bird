@@ -4,6 +4,8 @@ using UnityEngine;
 public class CustomObjectPool<T> where T : MonoBehaviour
 {
     private readonly Queue<T> _availableObjects = new Queue<T>();
+    private readonly HashSet<T> _activeObjects = new HashSet<T>();
+
     private readonly T _prefab;
     private readonly Transform _parentTransform;
 
@@ -27,6 +29,7 @@ public class CustomObjectPool<T> where T : MonoBehaviour
             instance = Object.Instantiate(_prefab, _parentTransform);
         }
 
+        _activeObjects.Add(instance);
         return instance;
     }
 
@@ -34,6 +37,17 @@ public class CustomObjectPool<T> where T : MonoBehaviour
     {
         instance.transform.rotation = Quaternion.identity;
         instance.gameObject.SetActive(false);
+        _activeObjects.Remove(instance);
         _availableObjects.Enqueue(instance);
+    }
+
+    public void DeactivateAll()
+    {
+        foreach (var obj in _activeObjects)
+        {
+            obj.gameObject.SetActive(false);
+            _availableObjects.Enqueue(obj);
+        }
+        _activeObjects.Clear();
     }
 }

@@ -5,8 +5,13 @@ public class Game : MonoBehaviour
     [SerializeField] private Bird _bird;
     [SerializeField] private StartScreen _startScreen;
     [SerializeField] private EndGameScreen _endScreen;
-    [SerializeField] private EnemyGenerator _enemyGenerator;
     [SerializeField] private ScoreCounter _scoreCounter;
+    [SerializeField] private GameObjectRegistry _gameObjectRegistry;
+
+    [SerializeField] private RedBirdGenerator _redBirdGenerator;
+    [SerializeField] private SmallBirdGenerator _smallBirdGenerator;
+    [SerializeField] private BulletSpawner _enemyBulletSpawner;
+    [SerializeField] private BulletSpawner _playerBulletSpawner;
 
     private void OnEnable()
     {
@@ -20,14 +25,12 @@ public class Game : MonoBehaviour
         _bird.GameOver -= EndGame;
     }
 
-    private void DeactivateAllBullets()
+    private void DeactivateTemporaryObjects()
     {
-        Bullet[] bullets = FindObjectsOfType<Bullet>();
-
-        foreach (Bullet bullet in bullets)
-        {
-            bullet.gameObject.SetActive(false);
-        }
+        _enemyBulletSpawner.DeactivateAllObjects();
+        _playerBulletSpawner.DeactivateAllObjects();
+        _redBirdGenerator.DeactivateAllObjects();
+        _smallBirdGenerator.DeactivateAllObjects();
     }
 
     private void OnPlayButtonClick()
@@ -46,8 +49,7 @@ public class Game : MonoBehaviour
 
     private void EndGame()
     {
-        DeactivateAllBullets();
-        _enemyGenerator.DeactivateAllObjects();
+        DeactivateTemporaryObjects();
         _startScreen.Open();
         _endScreen.Open();
         Time.timeScale = 0f;

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class StartScreen : Window
 {
-    [SerializeField] Button _playButton;
+    [SerializeField] private Button _playButton;
 
     public event Action PlayButtonClicked;
 

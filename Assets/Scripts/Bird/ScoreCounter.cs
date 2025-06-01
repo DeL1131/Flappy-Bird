@@ -7,7 +7,9 @@ public class ScoreCounter : MonoBehaviour
     private readonly int _scoreForKillEnemy = 10;
     private readonly int _scoreForOneSecondPlay = 1;
 
-    [SerializeField] private EnemyGenerator _enemyGenerator;
+    [SerializeField] private RedBirdGenerator _redBirdGenerator;
+    [SerializeField] private SmallBirdGenerator _smallBirdGenerator;
+
 
     private bool _isCoroutineActive = false;
     private float _delayAddScore = 1f;
@@ -20,13 +22,15 @@ public class ScoreCounter : MonoBehaviour
     {
         _isCoroutineActive = true;
         StartCoroutine(AddScoreForOneSecond());
-        _enemyGenerator.EnemyKilled += AddScoreForKill;
+        _redBirdGenerator.EnemyKilled += AddScoreForKill;
+        _smallBirdGenerator.EnemyKilled += AddScoreForKill;
     }
 
     private void OnDisable()
     {
         _isCoroutineActive = false;
-        _enemyGenerator.EnemyKilled -= AddScoreForKill;
+        _redBirdGenerator.EnemyKilled -= AddScoreForKill;
+        _smallBirdGenerator.EnemyKilled -= AddScoreForKill;
     }
 
     public void Reset()

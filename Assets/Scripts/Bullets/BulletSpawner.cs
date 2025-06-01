@@ -11,15 +11,20 @@ public class BulletSpawner : MonoBehaviour
         _bulletPool = new CustomObjectPool<Bullet>(_bulletPrefab);
     }
 
-    public Bullet SpawnBullet()
+    public Bullet SpawnBullet(Transform spawnTransform)
     {
         Bullet bullet = _bulletPool.Get();
-        bullet.transform.position = transform.position;
-        bullet.transform.right = transform.right;
+        bullet.transform.position = spawnTransform.position;
+        bullet.transform.right = spawnTransform.right;
 
         bullet.Returned += ReturnBullet;
 
         return bullet;
+    }
+
+    public void DeactivateAllObjects()
+    {
+        _bulletPool.DeactivateAll();
     }
 
     private void ReturnBullet(Bullet bullet)

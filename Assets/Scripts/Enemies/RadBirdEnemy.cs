@@ -14,10 +14,10 @@ public class RadBirdEnemy : Enemy
 
     private void Update()
     {
-        if (AttackCooldownHandler.CanAttack)
+        if (AttackCooldownHandler.IsReady)
         {
+            AttackCooldownHandler.StartTimer(AttackCooldown);
             _attacker.ExecuteAttack();
-            StartCoroutine(AttackCooldownHandler.CooldownRoutine());
         }
     }
 }                                           

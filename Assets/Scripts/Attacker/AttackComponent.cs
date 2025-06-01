@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class AttackType : MonoBehaviour
+public abstract class AttackComponent : MonoBehaviour
 {
     [SerializeField] protected float Damage;
     [SerializeField] protected LayerMask LayerMask;

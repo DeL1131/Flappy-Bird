@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(BirdMover))]
 [RequireComponent(typeof(ScoreCounter))]
 [RequireComponent(typeof(BirdCollisionHandler))]
-[RequireComponent(typeof(AttackCooldownHandler))]
+[RequireComponent(typeof(CooldownTimer))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(BirdInput))]
 [RequireComponent (typeof(RangeAttacker))]
@@ -12,6 +12,7 @@ using UnityEngine;
 public class Bird : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _damage;
+    [SerializeField] private float _attackCooldown;
 
     private RangeAttacker _attacker;
     private BirdMover _birdMover;
@@ -19,7 +20,7 @@ public class Bird : MonoBehaviour, IDamagable
     private BirdCollisionHandler _birdCollisionhandler;
     private Health _health;
     private BirdInput _input;
-    private AttackCooldownHandler _attackCooldownHandler;
+    private CooldownTimer _attackCooldownHandler;
 
     public event Action<float> Damaged;
     public event Action GameOver;
@@ -32,7 +33,7 @@ public class Bird : MonoBehaviour, IDamagable
         _scoreCounter = GetComponent<ScoreCounter>();
         _birdCollisionhandler = GetComponent<BirdCollisionHandler>();
         _birdMover = GetComponent<BirdMover>();
-        _attackCooldownHandler = GetComponent<AttackCooldownHandler>();
+        _attackCooldownHandler = GetComponent<CooldownTimer>();
     }
 
     private void OnEnable()
@@ -79,10 +80,10 @@ public class Bird : MonoBehaviour, IDamagable
 
     private void Attack()
     {
-        if (_attackCooldownHandler.CanAttack)
+        if (_attackCooldownHandler.IsReady)
         {
             _attacker.ExecuteAttack();
-            StartCoroutine(_attackCooldownHandler.CooldownRoutine());
+            _attackCooldownHandler.StartTimer(_attackCooldown);
         }
     }
 }

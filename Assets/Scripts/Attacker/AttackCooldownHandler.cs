@@ -5,17 +5,17 @@ public class AttackCooldownHandler : MonoBehaviour
 {
     [SerializeField] private float _attackCooldown;
 
-    public bool CanAttack { get; private set; }
+    public bool IsAttackReady { get; private set; }
 
     private void OnEnable()
     {
-        CanAttack = true;
+        IsAttackReady = true;
     }
 
     public IEnumerator CooldownRoutine()
     {
-        CanAttack = false;
+        IsAttackReady = false;
         yield return new WaitForSeconds(_attackCooldown);
-        CanAttack = true;
+        IsAttackReady = true;
     }
 }

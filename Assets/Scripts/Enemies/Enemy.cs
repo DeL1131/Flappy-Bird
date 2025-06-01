@@ -4,14 +4,16 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(EnemyCollisionHandler))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(AttackCooldownHandler))]
+[RequireComponent(typeof(CooldownTimer))]
 
 public abstract class Enemy : MonoBehaviour, IDamagable
 {
+    [SerializeField] protected float AttackCooldown = 1;
+
     protected Health Health;
     protected EnemyCollisionHandler CollisionHandler;
     protected Rigidbody2D Rigidbody2D;
-    protected AttackCooldownHandler AttackCooldownHandler;
+    protected CooldownTimer AttackCooldownHandler;
 
     public event Action<Enemy> OnCollided;
     public event Action<float> Damaged;
@@ -20,7 +22,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     protected virtual void Awake()
     {
         Health = GetComponent<Health>();
-        AttackCooldownHandler = GetComponent<AttackCooldownHandler>();
+        AttackCooldownHandler = GetComponent<CooldownTimer>();
         Rigidbody2D = GetComponent<Rigidbody2D>();
         CollisionHandler = GetComponent<EnemyCollisionHandler>();
     }
@@ -37,7 +39,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         CollisionHandler.Collided -= ProcessCollision;
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         Rigidbody2D.velocity = Vector3.zero;
         transform.rotation = Quaternion.identity;
