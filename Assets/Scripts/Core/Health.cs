@@ -48,7 +48,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Healing(float healAmount)
+    public void Heal(float healAmount)
     {
         if (healAmount >= 0)
         {

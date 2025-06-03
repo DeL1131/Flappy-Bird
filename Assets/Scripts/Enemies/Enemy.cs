@@ -2,16 +2,16 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-[RequireComponent(typeof(EnemyCollisionHandler))]
+[RequireComponent(typeof(CollisionHandler))]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CooldownTimer))]
 
-public abstract class Enemy : MonoBehaviour, IDamagable
+public abstract class Enemy : MonoBehaviour, IDamagable, IInteractable
 {
     [SerializeField] protected float AttackCooldown = 1;
 
     protected Health Health;
-    protected EnemyCollisionHandler CollisionHandler;
+    protected CollisionHandler CollisionHandler;
     protected Rigidbody2D Rigidbody2D;
     protected CooldownTimer AttackCooldownHandler;
 
@@ -24,7 +24,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         Health = GetComponent<Health>();
         AttackCooldownHandler = GetComponent<CooldownTimer>();
         Rigidbody2D = GetComponent<Rigidbody2D>();
-        CollisionHandler = GetComponent<EnemyCollisionHandler>();
+        CollisionHandler = GetComponent<CollisionHandler>();
     }
 
     private void OnEnable()
@@ -58,6 +58,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
     private void ProcessCollision(Component collision)
     {
+            Debug.Log("Collision Handler " + gameObject.name + " " + collision.name);
         if (collision.TryGetComponent(out Wall wall))
         {
             OnCollided?.Invoke(this);

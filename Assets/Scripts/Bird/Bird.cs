@@ -3,13 +3,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(BirdMover))]
 [RequireComponent(typeof(ScoreCounter))]
-[RequireComponent(typeof(BirdCollisionHandler))]
+[RequireComponent(typeof(CollisionHandler))]
 [RequireComponent(typeof(CooldownTimer))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(BirdInput))]
 [RequireComponent (typeof(RangeAttacker))]
 
-public class Bird : MonoBehaviour, IDamagable
+public class Bird : MonoBehaviour, IDamagable, IInteractable
 {
     [SerializeField] private float _damage;
     [SerializeField] private float _attackCooldown;
@@ -17,7 +17,7 @@ public class Bird : MonoBehaviour, IDamagable
     private RangeAttacker _attacker;
     private BirdMover _birdMover;
     private ScoreCounter _scoreCounter;
-    private BirdCollisionHandler _birdCollisionhandler;
+    private CollisionHandler _birdCollisionhandler;
     private Health _health;
     private BirdInput _input;
     private CooldownTimer _attackCooldownHandler;
@@ -31,7 +31,7 @@ public class Bird : MonoBehaviour, IDamagable
         _input = GetComponent<BirdInput>();
         _health = GetComponent<Health>();
         _scoreCounter = GetComponent<ScoreCounter>();
-        _birdCollisionhandler = GetComponent<BirdCollisionHandler>();
+        _birdCollisionhandler = GetComponent<CollisionHandler>();
         _birdMover = GetComponent<BirdMover>();
         _attackCooldownHandler = GetComponent<CooldownTimer>();
     }
@@ -63,11 +63,7 @@ public class Bird : MonoBehaviour, IDamagable
 
     private void ProcessCollision(Collider2D collision)
     {
-        if ((collision.TryGetComponent(out Ground ground)) || collision.TryGetComponent(out Wall wall))
-        {
-            GameOver?.Invoke();
-        }
-        if ((collision.TryGetComponent(out Enemy enemy)))
+        if ((collision.TryGetComponent(out IInteractable interactable)))
         {
             GameOver?.Invoke();
         }

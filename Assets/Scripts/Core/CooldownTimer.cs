@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class CooldownTimer : MonoBehaviour
 {
-    public bool IsReady { get; private set; }
+    public bool IsReady { get; private set; } = true;
 
     public event Action Completed;
-
-    private void OnEnable()
-    {
-        IsReady = true;
-    }
 
     public void StartTimer(float duration)
     {

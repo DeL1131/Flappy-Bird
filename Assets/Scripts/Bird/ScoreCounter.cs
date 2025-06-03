@@ -47,7 +47,7 @@ public class ScoreCounter : MonoBehaviour
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(_delayAddScore);
 
-        while (true)
+        while (enabled)
         {
             yield return waitForSeconds;
             SetScore(_scoreForOneSecondPlay);

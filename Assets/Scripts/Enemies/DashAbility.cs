@@ -1,13 +1,23 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+
+[RequireComponent(typeof(CooldownTimer))]
 
 public class DashAbility : MonoBehaviour
 {
-    private float _delay = 1f;
+    private CooldownTimer _cooldownTimer;
+
+    private float _delay = 2f;
     private float _speed = 20;
     private bool _isAbilityActive = false;
 
     public bool IsAbilityActive => _isAbilityActive;
+
+    private void Awake()
+    {
+        _cooldownTimer = GetComponent<CooldownTimer>();
+    }
 
     private void Update()
     {
@@ -23,7 +33,13 @@ public class DashAbility : MonoBehaviour
 
     private void OnEnable()
     {
-        StartCoroutine(DelayDash());
+        _cooldownTimer.StartTimer(_delay);
+        _cooldownTimer.Completed += ActivateAbility;
+    }
+
+    private void OnDisable()
+    {
+        _cooldownTimer.Completed -= ActivateAbility;
     }
 
     public void Reset()
@@ -34,11 +50,5 @@ public class DashAbility : MonoBehaviour
     private void ActivateAbility()
     {
         _isAbilityActive = true;
-    }
-
-    private IEnumerator DelayDash()
-    {
-        yield return new WaitForSeconds(_delay);
-        ActivateAbility();        
     }
 }

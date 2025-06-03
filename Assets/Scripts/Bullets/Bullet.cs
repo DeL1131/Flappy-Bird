@@ -1,21 +1,21 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(BulletCollisionHandler))]
+[RequireComponent(typeof(CollisionHandler))]
 
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _speed;
 
     private float _damage;
-    private BulletCollisionHandler _collisionHandler;
+    private CollisionHandler _collisionHandler;
     private LayerMask _layerMask;
 
     public event Action<Bullet> Returned;
 
     private void Awake()
     {
-        _collisionHandler = GetComponent<BulletCollisionHandler>();
+        _collisionHandler = GetComponent<CollisionHandler>();
     }
 
     private void OnEnable()

@@ -1,14 +1,12 @@
 using System;
 using UnityEngine;
 
-public abstract class CollisionHandler<T> : MonoBehaviour where T : Component
+public class CollisionHandler : MonoBehaviour
 {
-    public event Action<T> Collided;
+    public event Action<Collider2D> Collided;
 
-    protected abstract void OnTriggerEnter2D(Collider2D collision);
-
-    protected virtual void InvokeCollision(T collision)
-    {
+    private void OnTriggerEnter2D(Collider2D collision)
+    {       
         Collided?.Invoke(collision);
     }
 }
