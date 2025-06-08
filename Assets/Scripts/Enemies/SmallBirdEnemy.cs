@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(DashAbility))]
 
-public class SmallBirdEnemy : Enemy
+public class SmallBirdEnemy : BirdEnemy
 {
     private DashAbility _dashAbility;
 

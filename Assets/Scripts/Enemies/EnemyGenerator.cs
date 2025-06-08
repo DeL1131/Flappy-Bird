@@ -2,21 +2,21 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public abstract class EnemyGenerator : MonoBehaviour
+public class EnemyGenerator : MonoBehaviour
 {
-    [SerializeField] protected BootStrapper BootStrapper;
-    [SerializeField] protected Enemy Prefab;
+    [SerializeField] protected BulletSpawner _enemyBulletSpawner;
+    [SerializeField] protected BirdEnemy Prefab;
     [SerializeField] protected float Delay;
     [SerializeField] protected float LowerBound;
     [SerializeField] protected float UpperBound;
 
-    protected CustomObjectPool<Enemy> Pool;
+    protected CustomObjectPool<BirdEnemy> Pool;
 
     public event Action EnemyKilled;
 
     private void Start()
     {
-        Pool = new CustomObjectPool<Enemy>(Prefab);
+        Pool = new CustomObjectPool<BirdEnemy>(Prefab);
         StartCoroutine(GenerateEnemy());
     }
 
@@ -41,11 +41,11 @@ public abstract class EnemyGenerator : MonoBehaviour
         float spawnPositionY = UnityEngine.Random.Range(UpperBound, LowerBound);
         Vector3 spawnPoint = new Vector3(transform.position.x, spawnPositionY, transform.position.z);
 
-        Enemy enemy = Pool.Get();
+        BirdEnemy enemy = Pool.Get();
 
         if(enemy.TryGetComponent<RangeAttacker>(out RangeAttacker rangeAttacker))
         {
-            rangeAttacker.InjectDependencies(BootStrapper.EnemyBulletSpawner);
+            rangeAttacker.InjectDependencies(_enemyBulletSpawner);
         }
 
         enemy.OnCollided += Return;
@@ -54,7 +54,7 @@ public abstract class EnemyGenerator : MonoBehaviour
         enemy.transform.position = spawnPoint;
     }
 
-    protected void Return(Enemy enemy)
+    protected void Return(BirdEnemy enemy)
     {
         enemy.OnCollided -= Return;
         enemy.OnDied -= Return;
@@ -63,7 +63,7 @@ public abstract class EnemyGenerator : MonoBehaviour
         enemy.Reset();
     }
 
-    protected void ReportEnemyKilled(Enemy enemy)
+    protected void ReportEnemyKilled(BirdEnemy enemy)
     {
         EnemyKilled?.Invoke();
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent (typeof(RangeAttacker))]
 
-public class RadBirdEnemy : Enemy
+public class RadBirdEnemy : BirdEnemy
 {
     private RangeAttacker _attacker;
 

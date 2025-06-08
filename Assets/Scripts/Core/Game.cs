@@ -6,10 +6,9 @@ public class Game : MonoBehaviour
     [SerializeField] private StartScreen _startScreen;
     [SerializeField] private EndGameScreen _endScreen;
     [SerializeField] private ScoreCounter _scoreCounter;
-    [SerializeField] private GameObjectRegistry _gameObjectRegistry;
 
-    [SerializeField] private RedBirdGenerator _redBirdGenerator;
-    [SerializeField] private SmallBirdGenerator _smallBirdGenerator;
+    [SerializeField] private EnemyGenerator _redBirdGenerator;
+    [SerializeField] private EnemyGenerator _smallBirdGenerator;
     [SerializeField] private BulletSpawner _enemyBulletSpawner;
     [SerializeField] private BulletSpawner _playerBulletSpawner;
 

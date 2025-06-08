@@ -1,15 +1,13 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
+    [SerializeField] private EnemyGenerator _redBirdGenerator;
+    [SerializeField] private EnemyGenerator _smallBirdGenerator;
+
     private readonly int _scoreForKillEnemy = 10;
     private readonly int _scoreForOneSecondPlay = 1;
-
-    [SerializeField] private RedBirdGenerator _redBirdGenerator;
-    [SerializeField] private SmallBirdGenerator _smallBirdGenerator;
-
 
     private bool _isCoroutineActive = false;
     private float _delayAddScore = 1f;
@@ -21,7 +19,6 @@ public class ScoreCounter : MonoBehaviour
     private void OnEnable()
     {
         _isCoroutineActive = true;
-        StartCoroutine(AddScoreForOneSecond());
         _redBirdGenerator.EnemyKilled += AddScoreForKill;
         _smallBirdGenerator.EnemyKilled += AddScoreForKill;
     }
@@ -41,17 +38,6 @@ public class ScoreCounter : MonoBehaviour
     private void AddScoreForKill()
     {
         SetScore(_scoreForKillEnemy);
-    }
-
-    private IEnumerator AddScoreForOneSecond()
-    {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(_delayAddScore);
-
-        while (enabled)
-        {
-            yield return waitForSeconds;
-            SetScore(_scoreForOneSecondPlay);
-        }
     }
 
     private void SetScore(int amount)

@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CooldownTimer))]
 
-public abstract class Enemy : MonoBehaviour, IDamagable, IInteractable
+public class BirdEnemy : MonoBehaviour, IDamagable, IInteractable
 {
     [SerializeField] protected float AttackCooldown = 1;
 
@@ -15,9 +15,9 @@ public abstract class Enemy : MonoBehaviour, IDamagable, IInteractable
     protected Rigidbody2D Rigidbody2D;
     protected CooldownTimer AttackCooldownHandler;
 
-    public event Action<Enemy> OnCollided;
+    public event Action<BirdEnemy> OnCollided;
     public event Action<float> Damaged;
-    public event Action<Enemy> OnDied;
+    public event Action<BirdEnemy> OnDied;
 
     protected virtual void Awake()
     {
@@ -58,7 +58,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, IInteractable
 
     private void ProcessCollision(Component collision)
     {
-            Debug.Log("Collision Handler " + gameObject.name + " " + collision.name);
         if (collision.TryGetComponent(out Wall wall))
         {
             OnCollided?.Invoke(this);
